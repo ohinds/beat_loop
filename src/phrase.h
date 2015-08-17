@@ -1,25 +1,23 @@
 // A phrase is a single instance of loop content. I.e., a single loop
 // cycle with unique audio samples
 
-#include <vector>
+#pragma once
+
+#include "types.h"
 
 class Phrase {
 
  public:
 
-  Phrase(int sample_rate);
+  Phrase();
 
   ~Phrase();
 
-  bool addAudio(const float* buffer);
+  bool addAudio(const sample_vec &buffer);
 
-  bool completeRecording();
-
-  bool getAudio(float begin, float end, float* buffer);
+  bool getAudio(nframes_t begin_sample, sample_vec* buffer);
 
  private:
 
-  int sample_rate;
-  std::vector<float> audio;
-
+  sample_vec audio;
 };

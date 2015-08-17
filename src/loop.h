@@ -1,10 +1,12 @@
 // Loop class
 
+#pragma once
+
 #include <vector>
 
-#include <jack/jack.h>
-
 #include "phrase.h"
+#include "types.h"
+#include "ui.h"
 
 class Loop {
 
@@ -18,20 +20,35 @@ class Loop {
 
   bool run();
 
+  bool shutdown();
+
   bool play();
 
-  bool pause();
+  bool toggle_pause();
+
+  bool toggle_record();
 
   bool stop();
 
  private:
 
-  static int processCallback(jack_nframes_t nframes, void* arg);
+  bool start_recording();
 
-  int process(jack_nframes_t nframes);
+  bool stop_recording();
+
+  static int processCallback(nframes_t nframes, void* arg);
+
+  int process(nframes_t nframes);
 
   bool playing;
-  float current_position;
+  bool recording;
+  bool waiting_to_record;
+  bool paused;
+  nframes_t current_position;
+  nframes_t loop_length;
 
   std::vector<Phrase> phrases;
+  size_t num_active_phrases;
+
+  Ui ui;
 };
