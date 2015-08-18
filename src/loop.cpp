@@ -170,6 +170,9 @@ bool Loop::start_recording() {
       ui << "failed to resume playback\n";
     }
   }
+  else {
+    waiting_to_record = true;
+  }
 
   return true;
 }
@@ -200,8 +203,21 @@ int Loop::process(nframes_t nframes) {
   if (playing) {
     current_position += nframes;
 
-    if (loop_length > 0 && current_position > loop_length) {
-      current_position %= loop_length;
+    if (loop_length > 0 && current_position >= loop_length) {
+      current_position -= loop_length;
+
+      //assert(current_position < loop_length);
+
+      // if (recording) {
+      //   num_active_phrases++;
+      //   phrases.push_back(Phrase());
+      // }
+
+      if (waiting_to_record) {
+        recording = true;
+        waiting_to_record = false;
+        phrases.push_back(Phrase());
+      }
     }
   }
 
@@ -220,8 +236,10 @@ int Loop::process(nframes_t nframes) {
 
   // combine the existing phrases with the out buffer
   sample_vec phrase_out(nframes);
+
   for (size_t i = 0; i < num_active_phrases; i++) {
     if (!phrases[i].getAudio(current_position, &phrase_out)) {
+      ui << "phrase " << i << " failed\n";
       continue;
     }
 

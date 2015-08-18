@@ -29,7 +29,6 @@ bool beat_loop() {
         break;
       case ' ':
         loop.toggle_record();
-        ui << "toggled record\n";
         break;
     }
 

@@ -5,6 +5,7 @@
 using std::copy;
 
 Phrase::Phrase()
+  : ui(true)
 {}
 
 Phrase::~Phrase() {
@@ -19,11 +20,14 @@ bool Phrase::addAudio(const sample_vec &buffer) {
 }
 
 bool Phrase::getAudio(nframes_t begin, sample_vec* buffer) {
-  if (begin + buffer->size() < audio.size()) {
-    copy(audio.begin() + begin, audio.begin() + begin + buffer->size(),
-         buffer->begin());
-    return true;
+
+  if (begin + buffer->size() > audio.size()) {
+    ui << "error, audio request out of bounds\n";
+    return false;
   }
+
+  copy(audio.begin() + begin, audio.begin() + begin + buffer->size(),
+       buffer->begin());
 
   return true;
 }

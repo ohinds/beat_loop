@@ -25,7 +25,7 @@ class Ui {
 };
 
 template <typename T>
-Ui& operator<<(Ui &ui, T &t) {
+Ui& operator<<(Ui &ui, const T &t) {
   std::stringstream s;
   s << t;
   ui.print(s.str());

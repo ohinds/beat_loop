@@ -4,6 +4,7 @@
 #pragma once
 
 #include "types.h"
+#include "ui.h"
 
 class Phrase {
 
@@ -20,4 +21,6 @@ class Phrase {
  private:
 
   sample_vec audio;
+
+  Ui ui;
 };
